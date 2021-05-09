@@ -24,17 +24,22 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
     // Declaring Variables.
-    CallbackManager callbackManager;
-    TextView FacebookDataTextView;
-    LoginButton loginButton;
+//    TextView FacebookDataTextView;
     AccessTokenTracker accessTokenTracker;
+
+    //FBmain
+    LoginButton loginButton;
+    CallbackManager callbackManager;
+
+    //test
+    private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Passing LoginActivity in Facebook SDK.
-        FacebookSdk.sdkInitialize(LoginActivity.this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Adding Callback Manager.
         callbackManager = CallbackManager.Factory.create();
@@ -42,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Assign TextView ID.
-        FacebookDataTextView = (TextView)findViewById(R.id.TextView1);
+//        FacebookDataTextView = (TextView)findViewById(R.id.TextView1);
 
         // Assign Facebook Login button ID.
         loginButton = (LoginButton)findViewById(R.id.login_button);
@@ -68,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>(){
             @Override
             public void onSuccess(LoginResult loginResult){
-
+                Toast.makeText(LoginActivity.this,"Login Successed",Toast.LENGTH_SHORT).show();
                 // Calling method to access User Data After successfully login.
                 GraphLoginRequest(loginResult.getAccessToken());
             }
@@ -94,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (accessToken2 == null) {
 
                     // Clear the TextView after logout.
-                    FacebookDataTextView.setText("");
+//                    FacebookDataTextView.setText("");
 
                 }
             }
@@ -103,49 +108,49 @@ public class LoginActivity extends AppCompatActivity {
 
     // Method to access Facebook User Data.
     protected void GraphLoginRequest(AccessToken accessToken){
-        GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-
-                        try {
-
-                            // Adding all user info one by one into TextView.
-                            FacebookDataTextView.setText("ID: " + jsonObject.getString("id"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nName : " + jsonObject.getString("name"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nFirst name : " + jsonObject.getString("first_name"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLast name : " + jsonObject.getString("last_name"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nEmail : " + jsonObject.getString("email"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nGender : " + jsonObject.getString("gender"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLink : " + jsonObject.getString("link"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nTime zone : " + jsonObject.getString("timezone"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLocale : " + jsonObject.getString("locale"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nUpdated time : " + jsonObject.getString("updated_time"));
-
-                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nVerified : " + jsonObject.getString("verified"));
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-        Bundle bundle = new Bundle();
-        bundle.putString(
-                "fields",
-                "id,name,link,email,gender,last_name,first_name,locale,timezone,updated_time,verified"
-        );
-        graphRequest.setParameters(bundle);
-        graphRequest.executeAsync();
+//        GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken,
+//                new GraphRequest.GraphJSONObjectCallback() {
+//                    @Override
+//                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+//
+//                        try {
+//
+//                            // Adding all user info one by one into TextView.
+//                            FacebookDataTextView.setText("ID: " + jsonObject.getString("id"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nName : " + jsonObject.getString("name"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nFirst name : " + jsonObject.getString("first_name"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLast name : " + jsonObject.getString("last_name"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nEmail : " + jsonObject.getString("email"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nGender : " + jsonObject.getString("gender"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLink : " + jsonObject.getString("link"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nTime zone : " + jsonObject.getString("timezone"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nLocale : " + jsonObject.getString("locale"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nUpdated time : " + jsonObject.getString("updated_time"));
+//
+//                            FacebookDataTextView.setText(FacebookDataTextView.getText() + "\nVerified : " + jsonObject.getString("verified"));
+//                        }
+//                        catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString(
+//                "fields",
+//                "id,name,link,email,gender,last_name,first_name,locale,timezone,updated_time,verified"
+//        );
+//        graphRequest.setParameters(bundle);
+//        graphRequest.executeAsync();
 
     }
 
@@ -158,14 +163,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AppEventsLogger.activateApp(LoginActivity.this);
+        AppEventsLogger.activateApp(getApplication());
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(LoginActivity.this);
-
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        AppEventsLogger.deactivateApp(LoginActivity.this);
+//
+//    }
 }
