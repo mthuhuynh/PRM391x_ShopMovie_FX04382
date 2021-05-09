@@ -44,6 +44,4 @@ dependencies {
 
     implementation 'com.facebook.android:facebook-login:4.31.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
-
-
 }
