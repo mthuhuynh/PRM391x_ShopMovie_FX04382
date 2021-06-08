@@ -10,12 +10,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -23,6 +25,7 @@ import com.facebook.login.widget.ProfilePictureView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,6 +37,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextView email;
     private TextView gender;
     private TextView facebookName;
+
+    private AccessTokenTracker accessTokenTracker;
+    private ProfileTracker profileTracker;
+
+    private String firstName,lastName, userEmail, birthday, userGender;
+    private URL profilePicture;
+    private String userId;
+    private String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setReadPermissions(Arrays.asList("public_profile, email"));
         callbackManager = CallbackManager.Factory.create();
+
 
         // Callback registration
         btnLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -82,6 +94,9 @@ public class LoginActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intentMain);
                             }
                         });
                 Bundle parameters = new Bundle();
