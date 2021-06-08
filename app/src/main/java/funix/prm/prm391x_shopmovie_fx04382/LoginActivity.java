@@ -45,9 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
 
-    private String firstName, lastName, userEmail, birthday, userGender;
+    private String userName, userEmail, userId;
     private URL profilePicture;
-    private String userId;
     private String TAG = "LoginActivity";
 
 
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (LoginButton) findViewById(R.id.login_button);
         email = (TextView) findViewById(R.id.email);
         facebookName = (TextView) findViewById(R.id.name);
-        gender = (TextView) findViewById(R.id.gender);
+
         infoLayout = (LinearLayout) findViewById(R.id.layout_info);
         profilePictureView = (ProfilePictureView) findViewById(R.id.image);
         callbackManager = CallbackManager.Factory.create();
@@ -70,53 +69,48 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
                 if (AccessToken.getCurrentAccessToken() != null) {
                     RequestData();
                 }
             }
 
             @Override
-            public void onCancel() {
-
-            }
+            public void onCancel() {}
 
             @Override
-            public void onError(FacebookException exception) {
-            }
+            public void onError(FacebookException exception) {}
         });
     }
 
     private void RequestData() {
-
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object,GraphResponse response) {
-
                 final JSONObject json = response.getJSONObject();
-
-
 
                 try {
                     if(json != null){
                         Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
-//                        text = "<b>Name :</b> "+json.getString("name")+"<br><br><b>Email :</b> "+json.getString("email")+"<br><br><b>Profile link :</b> "+json.getString("link");
-//                /*details_txt.setText(Html.fromHtml(text));
-//                profile.setProfileId(json.getString("id"));*/
-//
-//                        Log.e(TAG, json.getString("name"));
-//                        Log.e(TAG, json.getString("email"));
-//                        Log.e(TAG, json.getString("id"));
-//                        //web.loadData(text, "text/html", "UTF-8");
+
+                        if (json.has("id")) {
+                            userId = json.getString("name");
+                        }
+                        if (json.has("name")) {
+                            userName = json.getString("name");
+                        }
+                        if (json.has("email")) {
+                            userEmail = json.getString("email");
+                        }
+
+//                        check mainactivity
+//                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
+//                            main.putExtra("name", userName);
+//                            main.putExtra("id", userId);
+//                            main.putExtra("email", userEmail);
+//                            startActivity(main);
+//                            finish();
 
                     }
-
-
-
-
-
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
