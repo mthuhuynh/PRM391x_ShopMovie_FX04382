@@ -5,16 +5,18 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin"
     tools:context="funix.prm.prm391x_shopmovie_fx04382.LoginActivity"
     >
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        />
 
     <LinearLayout
         android:id="@+id/layout_info"
@@ -22,13 +24,15 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_gravity="center_horizontal"
+        >
 
         <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
