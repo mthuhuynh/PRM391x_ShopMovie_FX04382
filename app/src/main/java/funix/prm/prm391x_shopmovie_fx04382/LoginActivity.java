@@ -47,7 +47,9 @@ public class LoginActivity extends AppCompatActivity {
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
 
-    private String userName, userEmail, userId;
+    private String userName = "";
+    private String userEmail = "";
+    private String userId = "";
     private URL profilePicture;
     private String TAG = "LoginActivity";
 
@@ -99,40 +101,40 @@ public class LoginActivity extends AppCompatActivity {
             public void onCompleted(JSONObject object,GraphResponse response) {
                 final JSONObject json = response.getJSONObject();
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
+//                SharedPreferences.Editor editor = sharedpreferences.edit();
 
                 try {
                     if(json != null){
                         Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
 
                         if (json.has("id")) {
-                            userId = json.getString("name");
-                            editor.putString(Id, userId);
+                            userId = json.getString("id");
+//                            editor.putString(Id, userId);
                         }
                         if (json.has("name")) {
                             userName = json.getString("name");
-                            editor.putString(Name, userName);
+//                            editor.putString(Name, userName);
                         }
                         if (json.has("email")) {
                             userEmail = json.getString("email");
-                            editor.putString(Email, userEmail);
+//                            editor.putString(Email, userEmail);
                         }
 
 
 //                        check mainactivity
-//                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
-//                            main.putExtra("name", userName);
-//                            main.putExtra("id", userId);
-//                            main.putExtra("email", userEmail);
-//                            startActivity(main);
-//                            finish();
+                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                            main.putExtra("name", userName);
+                            main.putExtra("id", userId);
+                            main.putExtra("email", userEmail);
+                            startActivity(main);
+                            finish();
 
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                editor.commit();
+//                editor.commit();
 
 
             }
