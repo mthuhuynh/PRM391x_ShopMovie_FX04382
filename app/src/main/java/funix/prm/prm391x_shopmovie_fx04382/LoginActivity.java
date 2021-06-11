@@ -1,6 +1,8 @@
 package funix.prm.prm391x_shopmovie_fx04382;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +51,12 @@ public class LoginActivity extends AppCompatActivity {
     private URL profilePicture;
     private String TAG = "LoginActivity";
 
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
+    public static final String Name = "nameKey";
+    public static final String Email = "emailKey";
+    public static final String Id = "idKey";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (LoginButton) findViewById(R.id.login_button);
         email = (TextView) findViewById(R.id.email);
         facebookName = (TextView) findViewById(R.id.name);
+
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
 
         infoLayout = (LinearLayout) findViewById(R.id.layout_info);
         profilePictureView = (ProfilePictureView) findViewById(R.id.image);
@@ -88,19 +99,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onCompleted(JSONObject object,GraphResponse response) {
                 final JSONObject json = response.getJSONObject();
 
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
                 try {
                     if(json != null){
                         Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
 
                         if (json.has("id")) {
                             userId = json.getString("name");
+                            editor.putString(Id, userId);
                         }
                         if (json.has("name")) {
                             userName = json.getString("name");
+                            editor.putString(Name, userName);
                         }
                         if (json.has("email")) {
                             userEmail = json.getString("email");
+                            editor.putString(Email, userEmail);
                         }
+
 
 //                        check mainactivity
 //                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
@@ -114,6 +131,10 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                editor.commit();
+
+
             }
         });
 
@@ -122,6 +143,10 @@ public class LoginActivity extends AppCompatActivity {
         parameters.putString("fields", "id,name,link,email,picture");
         request.setParameters(parameters);
         request.executeAsync();
+
+        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(main);
+        finish();
     }
 
         @Override
