@@ -53,12 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     private URL profilePicture;
     private String TAG = "LoginActivity";
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
-    public static final String Name = "nameKey";
-    public static final String Email = "emailKey";
-    public static final String Id = "idKey";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (LoginButton) findViewById(R.id.login_button);
         email = (TextView) findViewById(R.id.email);
         facebookName = (TextView) findViewById(R.id.name);
-
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
 
         infoLayout = (LinearLayout) findViewById(R.id.layout_info);
         profilePictureView = (ProfilePictureView) findViewById(R.id.image);
@@ -96,198 +87,53 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void RequestData() {
+        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object,GraphResponse response) {
                 final JSONObject json = response.getJSONObject();
 
-//                SharedPreferences.Editor editor = sharedpreferences.edit();
-
                 try {
                     if(json != null){
-                        Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
-
+//                        Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "json name:" + json.getString("name"));
                         if (json.has("id")) {
                             userId = json.getString("id");
-//                            editor.putString(Id, userId);
                         }
                         if (json.has("name")) {
                             userName = json.getString("name");
-//                            editor.putString(Name, userName);
+                            Log.d(TAG, "user name:" + userName);
                         }
                         if (json.has("email")) {
                             userEmail = json.getString("email");
-//                            editor.putString(Email, userEmail);
                         }
-
-
-//                        check mainactivity
-                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                            main.putExtra("name", userName);
-                            main.putExtra("id", userId);
-                            main.putExtra("email", userEmail);
-                            startActivity(main);
-                            finish();
 
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-//                editor.commit();
-
-
             }
         });
-
 
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,link,email,picture");
         request.setParameters(parameters);
         request.executeAsync();
 
-        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+//        Toast.makeText(LoginActivity.this, userName, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "extra name:" + userName);
+        main.putExtra("name", userName);
+        main.putExtra("id", userId);
+        main.putExtra("email", userEmail);
         startActivity(main);
         finish();
     }
 
-        @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
 
-
-//
-//        btnLogin.setReadPermissions(Arrays.asList("public_profile", "email"));
-
-//
-//        btnLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-//                    @Override
-//                    public void onCompleted(JSONObject object, GraphResponse response) {
-//                        Log.e(TAG, object.toString());
-//                        Log.e(TAG, response.toString());
-//
-//                        try {
-//                            Toast.makeText(LoginActivity.this, "try", Toast.LENGTH_SHORT).show();
-//                            userId = object.getString("id");
-//                            profilePicture = new URL("https://graph.facebook.com/" + userId + "/picture?width=500&height=500");
-//                            if (object.has("first_name"))
-//                                firstName = object.getString("first_name");
-//                            Toast.makeText(LoginActivity.this, firstName, Toast.LENGTH_SHORT).show();
-//                                facebookName.setText(firstName);
-//                            if (object.has("last_name"))
-////                                lastName = object.getString("last_name");
-//                            if (object.has("email"))
-//                                userEmail = object.getString("email");
-//                                email.setText(userEmail);
-//                            if (object.has("birthday"))
-////                                birthday = object.getString("birthday");
-//                            if (object.has("gender"))
-//                                userGender = object.getString("gender");
-//                                gender.setText(userGender );
-//
-//
-////                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
-////                            main.putExtra("name", firstName);
-////                            main.putExtra("surname", lastName);
-////                            main.putExtra("imageUrl", profilePicture.toString());
-////                            startActivity(main);
-////                            finish();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        } catch (MalformedURLException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//                Bundle parameters = new Bundle();
-//                parameters.putString("fields", "id, first_name, last_name, email, birthday, gender , location");
-//                request.setParameters(parameters);
-//                request.executeAsync();
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//            }
-//
-//            @Override
-//            public void onError(FacebookException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
-////        // Callback registration
-////        btnLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//
-////            @Override
-////            public void onSuccess(LoginResult loginResult) {
-////                GraphRequest request = GraphRequest.newMeRequest(
-////                        loginResult.getAccessToken(),
-////                        new GraphRequest.GraphJSONObjectCallback() {
-////
-////                            @Override
-////                            public void onCompleted(JSONObject object, GraphResponse response) {
-////                                Log.v("Main", response.toString());
-////                                Toast.makeText(LoginActivity.this, "json to Login Facebook", Toast.LENGTH_SHORT).show();
-////                                try {
-////                                    Toast.makeText(LoginActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
-////                                } catch (JSONException e) {
-////                                    e.printStackTrace();
-////                                }
-//////                                setProfileToView(object);
-////                                try {
-////                                email.setText(object.getString("email"));
-////                                gender.setText(object.getString("gender"));
-////                                facebookName.setText(object.getString("name"));
-////
-////                                profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-////                                profilePictureView.setProfileId(object.getString("id"));
-////                                infoLayout.setVisibility(View.VISIBLE);
-////                                } catch (JSONException e) {
-////                                    e.printStackTrace();
-////                                }
-////
-////                                Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
-////                                startActivity(intentMain);
-////                            }
-////                        });
-////                Bundle parameters = new Bundle();
-////                parameters.putString("fields", "id,name,email,gender");
-////                request.setParameters(parameters);
-////                request.executeAsync();
-////            }
-////
-////            @Override
-////            public void onCancel() {
-////
-////            }
-////
-////            @Override
-////            public void onError(FacebookException exception) {
-////                Toast.makeText(LoginActivity.this, "error to Login Facebook", Toast.LENGTH_SHORT).show();
-////            }
-////        });
-////    }
-//
-
-//
-////    private void setProfileToView(JSONObject jsonObject) {
-////        try {
-////            Toast.makeText(LoginActivity.this, "error to Login Facebook", Toast.LENGTH_SHORT).show();
-////            email.setText(jsonObject.getString("email"));
-////            gender.setText(jsonObject.getString("gender"));
-////            facebookName.setText(jsonObject.getString("name"));
-////
-////            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-////            profilePictureView.setProfileId(jsonObject.getString("id"));
-////            infoLayout.setVisibility(View.VISIBLE);
-////        } catch (JSONException e) {
-////            e.printStackTrace();
-////        }
-////    }
-//}

@@ -8,4 +8,5 @@
     <string name="fb_login_protocol_scheme">fb309478117375892</string>
     <string name="title_activity_home">MainActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main2">MainActivity</string>
 </resources>
