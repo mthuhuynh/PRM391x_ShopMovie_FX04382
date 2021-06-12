@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
-//        Toast.makeText(LoginActivity.this, userName, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "extra name:" + userName);
         main.putExtra("name", userName);
         main.putExtra("id", userId);
