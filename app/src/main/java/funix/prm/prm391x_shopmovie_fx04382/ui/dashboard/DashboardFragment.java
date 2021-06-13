@@ -24,6 +24,7 @@ public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
+    private String urlProfilePhoto;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class DashboardFragment extends Fragment {
 
         final TextView textName = binding.textName;
         final TextView textEmail = binding.textEmail;
-        String urlProfilePhoto;
+
 
         dashboardViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
