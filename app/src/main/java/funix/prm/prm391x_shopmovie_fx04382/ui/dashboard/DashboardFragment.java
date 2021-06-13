@@ -57,7 +57,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 Log.d("fm", s);
-                urlProfilePhoto = ""
+                urlProfilePhoto = "";
             }
         });
 

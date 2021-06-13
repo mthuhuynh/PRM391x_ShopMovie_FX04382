@@ -21,6 +21,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
@@ -50,7 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     private String userName = "";
     private String userEmail = "";
     private String userId = "";
-    private URL profilePicture;
+    private String userPicUrl = "";
+
     private String TAG = "LoginActivity";
 
 
@@ -88,24 +90,34 @@ public class LoginActivity extends AppCompatActivity {
 
     private void RequestData() {
 
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,email,gender,cover,picture.type(large)");
 
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                "me", parameters, HttpMethod.GET,
+                new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object,GraphResponse response) {
                 final JSONObject json = response.getJSONObject();
 
                 try {
-                    if(json != null){
+                    if (json != null) {
                         Log.d(TAG, "json name:" + json.getString("name"));
-                        if (json.has("id")) {
-                            userId = json.getString("id");
-                        }
+//                        if (json.has("id")) {
+//                            userId = json.getString("id");
+//                        }
                         if (json.has("name")) {
                             userName = json.getString("name");
                             Log.d(TAG, "user name:" + userName);
                         }
+
                         if (json.has("email")) {
                             userEmail = json.getString("email");
+                        }
+
+                        if (json.has("picture")) {
+                            userPicUrl = json.getJSONObject("picture").getJSONObject("data").getString("url");
+                            Log.d(TAG, "user URL:" + userPicUrl);
                         }
                     }
 
@@ -114,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                     Log.d(TAG, "extra name:" + userName);
                     main.putExtra("name", userName);
-                    main.putExtra("id", userId);
+                    main.putExtra("picURL", userPicUrl);
                     main.putExtra("email", userEmail);
                     startActivity(main);
                     finish();
@@ -125,8 +137,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,link,email,picture");
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields", "id,name,email,picture.type(large)");
         request.setParameters(parameters);
         request.executeAsync();
 
