@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void RequestData() {
-        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+
 
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -96,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     if(json != null){
-//                        Toast.makeText(LoginActivity.this, json.getString("name"), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "json name:" + json.getString("name"));
                         if (json.has("id")) {
                             userId = json.getString("id");
@@ -108,8 +107,18 @@ public class LoginActivity extends AppCompatActivity {
                         if (json.has("email")) {
                             userEmail = json.getString("email");
                         }
-
                     }
+
+                    Uri photoUrl = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+
+                    Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                    Log.d(TAG, "extra name:" + userName);
+                    main.putExtra("name", userName);
+                    main.putExtra("id", userId);
+                    main.putExtra("email", userEmail);
+                    startActivity(main);
+                    finish();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -121,18 +130,14 @@ public class LoginActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
-        Log.d(TAG, "extra name:" + userName);
-        main.putExtra("name", userName);
-        main.putExtra("id", userId);
-        main.putExtra("email", userEmail);
-        startActivity(main);
-        finish();
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "extra name:" + userName);
     }
 }
 

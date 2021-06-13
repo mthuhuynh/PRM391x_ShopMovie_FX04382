@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
         prices = new ArrayList<>();
 
 
+
 //        images = new ArrayList<>();
 
 //        try {
@@ -117,7 +118,7 @@ public class HomeFragment extends Fragment {
 //    public String loadJSONFromAsset() {
 //        String json = null;
 //        try {
-//            InputStream is = getContext().getAssets().open("users_list.json");
+//            InputStream is = getContext().getAssets().open("film.json");
 //            int size = is.available();
 //            byte[] buffer = new byte[size];
 //            is.read(buffer);
