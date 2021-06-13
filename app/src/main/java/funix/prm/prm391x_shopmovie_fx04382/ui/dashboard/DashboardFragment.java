@@ -31,6 +31,8 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private String urlProfilePhoto;
+    private URL url = null;
+    private Bitmap profilePic= null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,25 +64,25 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-//        dashboardViewModel.getPicURL().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                Log.d("fm", s);
-//                URL url = null;
-//                try {
-//                    url = new URL(s);
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-//                Bitmap profilePic= null;
-//                try {
-//                    profilePic = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                ivPicURL.setImageBitmap(profilePic);
-//            }
-//        });
+        dashboardViewModel.getPicURL().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Log.d("fm", s);
+
+                try {
+                    url = new URL(s);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    profilePic = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ivPicURL.setImageBitmap(profilePic);
+            }
+        });
 
 
         return root;
