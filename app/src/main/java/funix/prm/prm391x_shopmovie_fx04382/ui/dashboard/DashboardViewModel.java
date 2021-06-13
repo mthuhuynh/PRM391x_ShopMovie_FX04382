@@ -10,7 +10,7 @@ public class DashboardViewModel extends ViewModel {
 
     private MutableLiveData<String> mName = new MutableLiveData<>();
     private MutableLiveData<String> mEmail = new MutableLiveData<>();
-    private MutableLiveData<String> mId = new MutableLiveData<>();
+    private MutableLiveData<String> mPicURL = new MutableLiveData<>();
 
     public DashboardViewModel() {
         if(mName == null) {
@@ -21,8 +21,8 @@ public class DashboardViewModel extends ViewModel {
             mEmail.setValue("This is FB Email");
         }
 
-        if(mId == null) {
-            mId.setValue("This is FB Id");
+        if(mPicURL == null) {
+            mPicURL.setValue("This is FB PicURL");
         }
     }
 
@@ -34,23 +34,23 @@ public class DashboardViewModel extends ViewModel {
         return mEmail;
     }
 
-    public LiveData<String> getId() {
-        return mId;
+    public LiveData<String> getPicURL() {
+        return mPicURL;
     }
 
     public void setName(String s) {
-        Log.d("vm", s);
+        Log.d("vm name", s);
         mName.setValue(s);
     }
 
     public void setEmail(String s) {
-        Log.d("vm", s);
+        Log.d("vm email", s);
         mEmail.setValue(s);
     }
 
-    public void setId(String s) {
-        Log.d("vm", s);
-        mId.setValue(s);
+    public void setPicURL(String s) {
+        Log.d("vm url", s);
+        mPicURL.setValue(s);
     }
 
 }

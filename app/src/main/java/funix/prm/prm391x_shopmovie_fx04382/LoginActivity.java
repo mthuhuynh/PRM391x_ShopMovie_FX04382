@@ -98,9 +98,9 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     if(json != null){
                         Log.d(TAG, "json name:" + json.getString("name"));
-                        if (json.has("id")) {
-                            userId = json.getString("id");
-                        }
+//                        if (json.has("id")) {
+//                            userId = json.getString("id");
+//                        }
                         if (json.has("name")) {
                             userName = json.getString("name");
                             Log.d(TAG, "user name:" + userName);
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                     Log.d(TAG, "extra name:" + userName);
                     main.putExtra("name", userName);
-                    main.putExtra("id", userId);
+                    main.putExtra("picURL", userPicURL);
                     main.putExtra("email", userEmail);
                     startActivity(main);
                     finish();

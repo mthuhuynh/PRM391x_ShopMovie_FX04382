@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         String name = "";
         String email = "";
-        String id = "";
+        String picURL = "";
 
 //        String id = getIntent().getStringExtra("id");
 //        String email = getIntent().getStringExtra("email");
@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (intent.hasExtra("email")) {
-            name = getIntent().getStringExtra("email");
+            email = getIntent().getStringExtra("email");
 //            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
 
-        if (intent.hasExtra("id")) {
-            name = getIntent().getStringExtra("id");
+        if (intent.hasExtra("picURL")) {
+            picURL = getIntent().getStringExtra("picURL");
 //            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //        dashboardViewModel = new ViewModelProvider(getActivity()).get(LocationFragmentViewModel.class);
         dashboardViewModel.setName(name);
         dashboardViewModel.setEmail(email);
-        dashboardViewModel.setId(id);
+        dashboardViewModel.setPicURL(picURL);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
