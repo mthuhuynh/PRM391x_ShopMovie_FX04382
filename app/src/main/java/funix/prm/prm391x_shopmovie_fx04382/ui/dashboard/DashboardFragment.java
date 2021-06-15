@@ -18,6 +18,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,12 +77,14 @@ public class DashboardFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                try {
-                    profilePic = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ivPicURL.setImageBitmap(profilePic);
+                Picasso.get()
+                        .load(s)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .fit()
+                        .into(ivPicURL);
+//                    profilePic = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                ivPicURL.setImageBitmap(profilePic);
             }
         });
 
