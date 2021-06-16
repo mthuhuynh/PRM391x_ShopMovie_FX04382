@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -36,11 +37,12 @@ public class HomeFragment extends Fragment {
 
 //    private HomeViewModel homeViewModel;
 
-    RecyclerView dataList;
+    RecyclerView dataListRV;
     List<String> titles;
     List<String> prices;
     //    List<String> images;
     Adapter adapter;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        dataList = root.findViewById(R.id.dataList);
+        dataListRV = root.findViewById(R.id.dataList);
 
         titles = new ArrayList<>();
         prices = new ArrayList<>();
@@ -95,6 +97,17 @@ public class HomeFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+//        mVehicleAdapter = new VehicleAdapter(getContext(), vehicleList, new VehicleListener());
+
+        adapter = new Adapter(getContext(),titles, prices);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
+        dataListRV.setLayoutManager(gridLayoutManager);
+        dataListRV.setAdapter(adapter);
+
+        // refreshing recycler view
+        adapter.notifyDataSetChanged();
 
         return root;
     }
