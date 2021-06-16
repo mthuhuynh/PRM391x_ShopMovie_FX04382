@@ -71,12 +71,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 //            gridIcon = itemView.findViewById(R.id.imageView2);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked -> " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(v.getContext(), "Clicked -> " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
     }
 
