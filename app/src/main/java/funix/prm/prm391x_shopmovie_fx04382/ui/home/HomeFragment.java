@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     RecyclerView dataListRV;
     List<String> titles;
     List<String> prices;
-    //    List<String> images;
+    List<String> images;
     Adapter adapter;
 
 
@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment {
 
         titles = new ArrayList<>();
         prices = new ArrayList<>();
+        images = new ArrayList<>();
 
 //        Gson gson = new Gson();
 //
@@ -88,11 +89,12 @@ public class HomeFragment extends Fragment {
                 Log.d("Details-->", jo_inside.getString("title"));
                 String title_value = jo_inside.getString("title");
                 String price_value = jo_inside.getString("price");
+                String image_value = jo_inside.getString("image");
 
                 //Add your values in your `ArrayList` as below:
                 titles.add(title_value);
                 prices.add(price_value);
-
+                images.add(image_value);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -100,7 +102,7 @@ public class HomeFragment extends Fragment {
 
 //        mVehicleAdapter = new VehicleAdapter(getContext(), vehicleList, new VehicleListener());
 
-        adapter = new Adapter(getContext(),titles, prices);
+        adapter = new Adapter(getContext(),titles, prices, images);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
         dataListRV.setLayoutManager(gridLayoutManager);
