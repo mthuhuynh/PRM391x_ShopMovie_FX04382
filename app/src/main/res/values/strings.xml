@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">PRM391x_ShopMovie_FX04382</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Movie</string>
+    <string name="title_dashboard">Profile</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="menu_item_logout">Log out</string>
 
     <string name="facebook_app_id">309478117375892</string>
     <string name="fb_login_protocol_scheme">fb309478117375892</string>
