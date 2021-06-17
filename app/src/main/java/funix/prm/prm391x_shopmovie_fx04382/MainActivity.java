@@ -2,14 +2,8 @@ package funix.prm.prm391x_shopmovie_fx04382;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,57 +12,62 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import funix.prm.prm391x_shopmovie_fx04382.ui.dashboard.DashboardViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DashboardViewModel dashboardViewModel;
-    private String TAG = "MainActivity";
-    private String loginFrom = null;
+    private String loginFrom;
+    private String name = "";
+    private String email = "";
+    private String picURL = "";
+
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //[Facebook]
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        //[Google]
+        // [START configure_signin]
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // [END configure_signin]
 
-        String name = "";
-        String email = "";
-        String picURL = "";
+        // [START build_client]
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        // [END build_client]
 
-//        String id = getIntent().getStringExtra("id");
-//        String email = getIntent().getStringExtra("email");
+        //Get Extras from Intent
         Intent intent = getIntent();
-
         if (intent.hasExtra("from")) {
             loginFrom = getIntent().getStringExtra("from");
-            Log.d(TAG, "from:" + loginFrom);
-//            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
-
         if (intent.hasExtra("name")) {
             name = getIntent().getStringExtra("name");
-            Log.d(TAG, "n:" + name);
-//            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
-
         if (intent.hasExtra("email")) {
             email = getIntent().getStringExtra("email");
-            Log.d(TAG, "e:" + email);
-//            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
-
         if (intent.hasExtra("picURL")) {
             picURL = getIntent().getStringExtra("picURL");
-            Log.d(TAG, "u:" + picURL);
-//            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
         }
 
-        Log.d(TAG, "MainAc name:" + name);
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-//        dashboardViewModel = new ViewModelProvider(getActivity()).get(LocationFragmentViewModel.class);
+        DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         dashboardViewModel.setName(name);
         dashboardViewModel.setEmail(email);
         dashboardViewModel.setPicURL(picURL);
@@ -92,26 +91,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                if(loginFrom.equals("Facebook")) {
-                    Toast.makeText(this, "Search button selected", Toast.LENGTH_SHORT).show();
-                    logoutFB();
-                } else if (loginFrom.equals("Google")) {
+        if (item.getItemId() == R.id.logout) {
+            if (loginFrom.equals("Facebook")) {
+                logoutFB();
+            } else if (loginFrom.equals("Google")) {
+                signoutGoogle();
+            }
 
-                }
-
-                return true;
+            switchActivity();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void logoutFB() {
-        LoginManager.getInstance().logOut();
-
+    private void switchActivity() {
         Intent logout = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(logout);
         finish();
+    }
+
+    private void signoutGoogle() {
+        mGoogleSignInClient.signOut();
+    }
+
+    private void logoutFB() {
+        LoginManager.getInstance().logOut();
     }
 }

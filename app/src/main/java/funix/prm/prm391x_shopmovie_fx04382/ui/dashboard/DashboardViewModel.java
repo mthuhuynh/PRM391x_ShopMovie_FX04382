@@ -1,7 +1,5 @@
 package funix.prm.prm391x_shopmovie_fx04382.ui.dashboard;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -39,17 +37,14 @@ public class DashboardViewModel extends ViewModel {
     }
 
     public void setName(String s) {
-        Log.d("vm name", s);
         mName.setValue(s);
     }
 
     public void setEmail(String s) {
-        Log.d("vm email", s);
         mEmail.setValue(s);
     }
 
     public void setPicURL(String s) {
-        Log.d("vm url", s);
         mPicURL.setValue(s);
     }
 
