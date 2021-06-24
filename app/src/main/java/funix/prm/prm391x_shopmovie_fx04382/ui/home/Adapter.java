@@ -1,6 +1,10 @@
 package funix.prm.prm391x_shopmovie_fx04382.ui.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Movie;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,12 +28,21 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     List<String> prices;
     List<String> images;
     LayoutInflater inflater;
+    private MovieAdapterListener mListener;
 
     public Adapter(Context ctx, List<String> titles, List<String> prices, List<String> images) {
         this.titles = titles;
         this.prices = prices;
         this.images = images;
         this.inflater = LayoutInflater.from(ctx);
+    }
+
+    /**
+     * The interface that receives onClick listener.
+     */
+    public interface MovieAdapterListener {
+        void onMovieSelected();
+//        void onMovieSelected(Movie movie, View view);
     }
 
     @NonNull
@@ -42,7 +57,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.title.setText(titles.get(position));
         holder.price.setText(prices.get(position));
 
-        if(images.get(position) != null) {
+        if (images.get(position) != null) {
             Picasso.get()
                     .load(images.get(position))
                     .placeholder(R.drawable.ic_launcher_background)
@@ -67,6 +82,55 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             title = itemView.findViewById(R.id.textView_title);
             price = itemView.findViewById(R.id.textView_price);
             image = itemView.findViewById(R.id.imageView_poster);
+
+            mListener.onMovieSelected();
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (itemView.getId() == R.id.imageView_poster) {
+//                        Log.d("on click ", "poster");
+//                        Bitmap image = BitmapFactory.decodeResource(itemView.getContext().getResources(),
+//                                R.drawable.ic_launcher_background);
+//                        SharePhoto photo = new SharePhoto.Builder()
+//                                .setBitmap(image)
+//                                .build();
+//                        SharePhotoContent content = new SharePhotoContent.Builder()
+//                                .addPhoto(photo)
+//                                .build();
+//                    }
+//                }
+//            });
         }
     }
 }
+
+//    public void onClick(View v) {
+//        if(v.getId() == R.id.imageView_poster) {
+//            Log.d("on click ", "poster");
+//            Bitmap image = BitmapFactory.decodeResource(v.getContext().getResources(),
+//                    R.drawable.ic_launcher_background);
+//            SharePhoto photo = new SharePhoto.Builder()
+//                    .setBitmap(image)
+//                    .build();
+//            SharePhotoContent content = new SharePhotoContent.Builder()
+//                    .addPhoto(photo)
+//                    .build();
+//        }
+//    }
+
+//    /**
+//     * Share Photo
+//     * @param b Hình ảnh dạng bitmap
+//     * @param caption thêm caption
+//     */
+//    public static void sharePhoto(Bitmap b, String caption) {
+//        SharePhoto photo = new SharePhoto.Builder()
+//                .setBitmap(b)
+//                .setCaption(caption)
+//                .build();
+//        SharePhotoContent content = new SharePhotoContent.Builder()
+//                .addPhoto(photo).build();
+////        ShareDialog.show(LoginActivity, content);
+//    }
+//}
+

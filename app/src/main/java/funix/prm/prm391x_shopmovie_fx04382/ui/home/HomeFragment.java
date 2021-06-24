@@ -1,14 +1,25 @@
 package funix.prm.prm391x_shopmovie_fx04382.ui.home;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +30,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import funix.prm.prm391x_shopmovie_fx04382.R;
 
@@ -60,9 +72,9 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        adapter = new Adapter(getContext(),titles, prices, images);
+        adapter = new Adapter(getContext(), titles, prices, images);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         dataListRV.setLayoutManager(gridLayoutManager);
         dataListRV.setAdapter(adapter);
 
@@ -88,4 +100,27 @@ public class HomeFragment extends Fragment {
         }
         return json;
     }
+
+    private class MovieListener implements Adapter.MovieAdapterListener {
+
+        @Override
+        public void onMovieSelected() {
+            Log.d("on click ", "poster");
+            Bitmap image = BitmapFactory.decodeResource(requireContext().getResources(),
+                    R.drawable.ic_launcher_background);
+            SharePhoto photo = new SharePhoto.Builder()
+                    .setBitmap(image)
+                    .build();
+            SharePhotoContent content = new SharePhotoContent.Builder()
+                    .addPhoto(photo)
+                    .build();
+        }
+    }
 }
+//            /*
+//             * Using Navigation object we find navigation controller with view then we will call
+//             * navigate with it's action name and pass argument to open correct item. You can change
+//             * this action name
+//             */
+//            Navigation.findNavController(view).navigate(VehiclesFragmentDirections.actionVehiclesFragmentToVehicleDetailFragment(vehicle));
+
