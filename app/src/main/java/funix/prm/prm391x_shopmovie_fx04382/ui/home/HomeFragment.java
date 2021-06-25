@@ -1,27 +1,22 @@
 package funix.prm.prm391x_shopmovie_fx04382.ui.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.CallbackManager;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -38,7 +33,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import funix.prm.prm391x_shopmovie_fx04382.MainActivity;
 import funix.prm.prm391x_shopmovie_fx04382.Movie;
 import funix.prm.prm391x_shopmovie_fx04382.R;
 
@@ -49,15 +43,20 @@ public class HomeFragment extends Fragment {
     Adapter adapter;
     ImageHelper imageHelper;
 
-    Bitmap b;
+    Bitmap bitmap;
+    ImageView imageView;
 
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        // this part is optional
+//        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() { ... });
 
         dataListRV = root.findViewById(R.id.dataList);
 
@@ -89,7 +88,6 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-
     public String loadJSONFromAsset() {
         String json;
         try {
@@ -115,12 +113,37 @@ public class HomeFragment extends Fragment {
             ImageLoadAsyncTask imageLoadAsyncTask = new ImageLoadAsyncTask();
             imageLoadAsyncTask.execute(new String[]{movie.getImage()});
             Log.d("movie getImg", "homefragment");
+        }
+    }
 
-            if (b != null) {
+    public class ImageLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                // Sets the flag indicating whether this URLConnection allows input.
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                return bitmap;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if(bitmap == null)
+                Log.d("imageAsync", "Can't get image from url");
+
+            if (bitmap != null) {
                 Log.d("movie getImg != null", "homefragment");
 
                 SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(b)
+                        .setBitmap(bitmap)
                         .setCaption("Shop Movie - FX04382")
                         .build();
                 Log.d("movie sharephoto", String.valueOf(photo != null));
@@ -129,26 +152,19 @@ public class HomeFragment extends Fragment {
                         .addPhoto(photo).build();
                 Log.d("movie sharephotocontent", String.valueOf(content != null));
 
-                ShareDialog.show(HomeFragment.this, content);
+                if (ShareDialog.canShow(SharePhotoContent.class)) {
+                    Log.d("sharedialog", "can show");
+                    shareDialog.show(HomeFragment.this, content);
+
+                }
+
             }
         }
-
-
     }
 
-    public class ImageLoadAsyncTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            b = ImageHelper.getBitmapFromURL(strings[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if(b == null)
-                Log.d("imageAsync", "Can't get image from url");
-        }
-
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

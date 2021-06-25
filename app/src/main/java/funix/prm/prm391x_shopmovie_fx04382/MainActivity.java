@@ -1,5 +1,6 @@
 package funix.prm.prm391x_shopmovie_fx04382;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,12 +15,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import funix.prm.prm391x_shopmovie_fx04382.ui.dashboard.DashboardViewModel;
+import funix.prm.prm391x_shopmovie_fx04382.ui.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,3 +123,4 @@ public class MainActivity extends AppCompatActivity {
         LoginManager.getInstance().logOut();
     }
 }
+
