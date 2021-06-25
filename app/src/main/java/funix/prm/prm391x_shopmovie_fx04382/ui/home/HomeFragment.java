@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -48,13 +49,15 @@ public class HomeFragment extends Fragment {
     Adapter adapter;
     ImageHelper imageHelper;
 
+    Bitmap b;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
 
         dataListRV = root.findViewById(R.id.dataList);
 
@@ -107,27 +110,45 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onMovieSelected(Movie movie, View view) {
-
             Log.d("movie selected", "homefragment");
 
-            Bitmap b = imageHelper.getBitmapFromURL(movie.getImage());
-
+            ImageLoadAsyncTask imageLoadAsyncTask = new ImageLoadAsyncTask();
+            imageLoadAsyncTask.execute(new String[]{movie.getImage()});
             Log.d("movie getImg", "homefragment");
+
             if (b != null) {
                 Log.d("movie getImg != null", "homefragment");
+
                 SharePhoto photo = new SharePhoto.Builder()
                         .setBitmap(b)
                         .setCaption("Shop Movie - FX04382")
                         .build();
-
                 Log.d("movie sharephoto", String.valueOf(photo != null));
+
                 SharePhotoContent content = new SharePhotoContent.Builder()
                         .addPhoto(photo).build();
-
                 Log.d("movie sharephotocontent", String.valueOf(content != null));
+
                 ShareDialog.show(HomeFragment.this, content);
             }
         }
+
+
     }
 
+    public class ImageLoadAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            b = ImageHelper.getBitmapFromURL(strings[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if(b == null)
+                Log.d("imageAsync", "Can't get image from url");
+        }
+
+    }
 }
