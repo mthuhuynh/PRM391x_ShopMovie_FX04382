@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +46,15 @@ public class HomeFragment extends Fragment {
     RecyclerView dataListRV;
     List<Movie> movies;
     Adapter adapter;
+    ImageHelper imageHelper;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         dataListRV = root.findViewById(R.id.dataList);
 
@@ -102,32 +107,27 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onMovieSelected(Movie movie, View view) {
-            Bitmap b = getBitmapFromURL(movie.getImage());
+
             Log.d("movie selected", "homefragment");
+
+            Bitmap b = imageHelper.getBitmapFromURL(movie.getImage());
+
+            Log.d("movie getImg", "homefragment");
             if (b != null) {
+                Log.d("movie getImg != null", "homefragment");
                 SharePhoto photo = new SharePhoto.Builder()
                         .setBitmap(b)
                         .setCaption("Shop Movie - FX04382")
                         .build();
+
+                Log.d("movie sharephoto", String.valueOf(photo != null));
                 SharePhotoContent content = new SharePhotoContent.Builder()
                         .addPhoto(photo).build();
+
+                Log.d("movie sharephotocontent", String.valueOf(content != null));
                 ShareDialog.show(HomeFragment.this, content);
             }
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
