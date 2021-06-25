@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
 
                 if (ShareDialog.canShow(SharePhotoContent.class)) {
                     Log.d("sharedialog", "can show");
-                    shareDialog.show(HomeFragment.this, content);
+                    shareDialog.show(content);
 
                 }
 
