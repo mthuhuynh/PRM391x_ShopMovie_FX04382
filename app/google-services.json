@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "778932160082",
+    "project_id": "android-asm4-1623607004511",
+    "storage_bucket": "android-asm4-1623607004511.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778932160082:android:52ba64f062a831c78c018b",
+        "android_client_info": {
+          "package_name": "funix.prm.prm391x_shopmovie_fx04382"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778932160082-5gd3cc69l3et0akk7369uvt3eeqv7okt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "funix.prm.prm391x_shopmovie_fx04382",
+            "certificate_hash": "27b2627787f87619ef5afd31ab593ee3fc48ab2f"
+          }
+        },
+        {
+          "client_id": "778932160082-morpdeghagiirktaui3sjd5715pq51iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc-CHsTQGKWgYo7NA8qVe41lWtW2hSdoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778932160082-morpdeghagiirktaui3sjd5715pq51iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
