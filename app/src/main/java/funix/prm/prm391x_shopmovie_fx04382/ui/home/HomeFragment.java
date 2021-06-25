@@ -1,22 +1,25 @@
 package funix.prm.prm391x_shopmovie_fx04382.ui.home;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -27,19 +30,20 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+import funix.prm.prm391x_shopmovie_fx04382.MainActivity;
+import funix.prm.prm391x_shopmovie_fx04382.Movie;
 import funix.prm.prm391x_shopmovie_fx04382.R;
 
 public class HomeFragment extends Fragment {
 
     RecyclerView dataListRV;
-    List<String> titles;
-    List<String> prices;
-    List<String> images;
+    List<Movie> movies;
     Adapter adapter;
 
 
@@ -49,32 +53,25 @@ public class HomeFragment extends Fragment {
 
         dataListRV = root.findViewById(R.id.dataList);
 
-        titles = new ArrayList<>();
-        prices = new ArrayList<>();
-        images = new ArrayList<>();
+        movies = new ArrayList<>();
 
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray m_jArray = obj.getJSONArray("films");
+            JSONArray jArr = obj.getJSONArray("films");
 
-            for (int i = 0; i < m_jArray.length(); i++) {
-                JSONObject jo_inside = m_jArray.getJSONObject(i);
-                String title_value = jo_inside.getString("title");
-                String price_value = jo_inside.getString("price");
-                String image_value = jo_inside.getString("image");
+            for (int i = 0; i < jArr.length(); i++) {
+                JSONObject json = jArr.getJSONObject(i);
 
-                //Add your values in your `ArrayList` as below:
-                titles.add(title_value);
-                prices.add(price_value);
-                images.add(image_value);
+                //Add values in Movie `ArrayList` as below:
+                movies.add(new Movie(json.getString("title"), json.getString("image"), json.getString("price")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        adapter = new Adapter(getContext(), titles, prices, images);
+        adapter = new Adapter(getContext(), movies, new MovieListener());
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
         dataListRV.setLayoutManager(gridLayoutManager);
         dataListRV.setAdapter(adapter);
 
@@ -104,23 +101,33 @@ public class HomeFragment extends Fragment {
     private class MovieListener implements Adapter.MovieAdapterListener {
 
         @Override
-        public void onMovieSelected() {
-            Log.d("on click ", "poster");
-            Bitmap image = BitmapFactory.decodeResource(requireContext().getResources(),
-                    R.drawable.ic_launcher_background);
-            SharePhoto photo = new SharePhoto.Builder()
-                    .setBitmap(image)
-                    .build();
-            SharePhotoContent content = new SharePhotoContent.Builder()
-                    .addPhoto(photo)
-                    .build();
+        public void onMovieSelected(Movie movie, View view) {
+            Bitmap b = getBitmapFromURL(movie.getImage());
+            Log.d("movie selected", "homefragment");
+            if (b != null) {
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(b)
+                        .setCaption("Shop Movie - FX04382")
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo).build();
+                ShareDialog.show(HomeFragment.this, content);
+            }
+        }
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
-//            /*
-//             * Using Navigation object we find navigation controller with view then we will call
-//             * navigate with it's action name and pass argument to open correct item. You can change
-//             * this action name
-//             */
-//            Navigation.findNavController(view).navigate(VehiclesFragmentDirections.actionVehiclesFragmentToVehicleDetailFragment(vehicle));
-

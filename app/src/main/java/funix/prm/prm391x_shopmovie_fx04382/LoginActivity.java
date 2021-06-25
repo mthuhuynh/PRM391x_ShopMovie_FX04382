@@ -1,7 +1,6 @@
 package funix.prm.prm391x_shopmovie_fx04382;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +16,6 @@ import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -57,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         btnLogin.setReadPermissions(Arrays.asList("public_profile", "email"));
-
 
         btnLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -182,21 +175,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(main);
             finish();
         }
-    }
-
-    /**
-     * Share Photo
-     * @param b Hình ảnh dạng bitmap
-     * @param caption thêm caption
-     */
-    public static void sharePhoto(Bitmap b, String caption) {
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(b)
-                .setCaption(caption)
-                .build();
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo).build();
-//        ShareDialog.show(LoginActivity, content);
     }
 }
 
